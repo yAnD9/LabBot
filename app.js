@@ -1,5 +1,6 @@
 let tg = window.Telegram.WebApp;
 tg.expand();
+tg.ready();
 
 function showNotification(message, isError = false) {
     const notification = document.createElement('div');
@@ -14,72 +15,109 @@ function showNotification(message, isError = false) {
         border-radius: 10px;
         z-index: 1000;
         font-weight: bold;
+        text-align: center;
     `;
     notification.textContent = message;
     document.body.appendChild(notification);
 
     setTimeout(() => {
-        document.body.removeChild(notification);
+        if (document.body.contains(notification)) {
+            document.body.removeChild(notification);
+        }
     }, 3000);
 }
 
-let btnBalet = document.getElementById("btn_balet");
-let btnBunker = document.getElementById("btn_bunker");
-let btnBeerfactory = document.getElementById("btn_beerfactory");
-let btnTheater = document.getElementById("btn_theater");
-let btnJesus = document.getElementById("btn_Jesus");
-let btnWing = document.getElementById("btn_wing");
-let btnRocket = document.getElementById("btn_rocket");
-let btnChurch = document.getElementById("btn_church");
-let btnPlane = document.getElementById("btn_plane");
-let btnMuseum = document.getElementById("btn_museum");
+function sendAttractionToBot(attractionName) {
+    console.log('Отправка данных:', attractionName);
 
-btnBalet.addEventListener("click", function() {
-    sendAttractionToBot("Самарский академический театр оперы и балета имени Шостаковича");
-});
+    if (window.Telegram && window.Telegram.WebApp) {
+        try {
+            // Основной способ отправки данных
+            tg.sendData(attractionName);
+            showNotification(`✓ Отправлено: ${attractionName}`);
 
-btnBunker.addEventListener("click", function() {
-    sendAttractionToBot("Бункер Сталина");
-});
+            // Дополнительно можно закрыть WebApp после отправки
+            setTimeout(() => {
+                tg.close();
+            }, 1000);
 
-btnBeerfactory.addEventListener("click", function() {
-    sendAttractionToBot("Жигулевский пивоваренный завод");
-});
+        } catch (error) {
+            console.error('Ошибка отправки:', error);
+            showNotification('❌ Ошибка отправки', true);
+        }
+    } else {
+        console.log('Тестовый режим:', attractionName);
+        showNotification(`Тест: ${attractionName}`);
+    }
+}
 
-btnTheater.addEventListener("click", function() {
-    sendAttractionToBot("Самарский академический театр драмы имени Горького");
-});
-
-btnJesus.addEventListener("click", function() {
-    sendAttractionToBot("Храм Пресвятого Сердца Иисуса");
-});
-
-btnWing.addEventListener("click", function() {
-    sendAttractionToBot("Монумент Славы в честь работников авиапромышленности");
-});
-
-btnRocket.addEventListener("click", function() {
-    sendAttractionToBot("Монумент ракета-носитель "Союз"");
-});
-
-btnChurch.addEventListener("click", function() {
-    sendAttractionToBot("Софийская церковь");
-});
-
-btnPlane.addEventListener("click", function() {
-    sendAttractionToBot("Памятник штурмовику Ил-2");
-});
-
-btnMuseum.addEventListener("click", function() {
-    sendAttractionToBot("Самарский областной историко-краеведческий музей");
-});
-
+// Инициализация после загрузки DOM
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById("usercard").innerHTML =
-        `<div style="text-align: center; padding: 10px;">
-            <p> Выберите достопримечательность выше</p>
-        </div>`;
+    console.log('DOM загружен, инициализация кнопок...');
+
+    // Инициализируем usercard
+    const usercard = document.getElementById("usercard");
+    if (usercard) {
+        usercard.innerHTML =
+            `<div style="text-align: center; padding: 10px;">
+                <p>🎯 Выберите достопримечательность выше</p>
+                <p style="font-size: 12px; color: #666;">После высказавания откроется чат с ботом</p>
+            </div>`;
+    }
+
+    // Маппинг кнопок
+    const buttons = {
+        "btn_balet": "Самарский академический театр оперы и балета имени Шостаковича",
+        "btn_bunker": "Бункер Сталина",
+        "btn_beerfactory": "Жигулевский пивоваренный завод",
+        "btn_theater": "Самарский академический театр драмы имени Горького",
+        "btn_Jesus": "Храм Пресвятого Сердца Иисуса",
+        "btn_wing": "Монумент Славы в честь работников авиапромышленности",
+        "btn_rocket": 'Монумент ракета-носитель "Союз"',
+        "btn_church": "Софийская церковь",
+        "btn_plane": "Памятник штурмовику Ил-2",
+        "btn_museum": "Самарский областной историко-краеведческий музей"
+    };
+
+    // Добавляем обработчики для всех кнопок
+    Object.keys(buttons).forEach(buttonId => {
+        const button = document.getElementById(buttonId);
+        if (button) {
+            button.addEventListener("click", function() {
+                console.log(`Нажата кнопка: ${buttonId}`);
+                sendAttractionToBot(buttons[buttonId]);
+            });
+
+            // Добавляем визуальный feedback
+            button.style.transition = 'all 0.2s ease';
+            button.addEventListener('mousedown', () => {
+                button.style.transform = 'scale(0.95)';
+            });
+            button.addEventListener('mouseup', () => {
+                button.style.transform = 'scale(1)';
+            });
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = 'scale(1)';
+            });
+
+        } else {
+            console.warn(`Кнопка не найдена: ${buttonId}`);
+        }
+    });
+
+    // Проверяем доступность Telegram WebApp
+    if (window.Telegram && window.Telegram.WebApp) {
+        console.log('Telegram WebApp доступен');
+        console.log('Версия WebApp:', tg.version);
+        console.log('Платформа:', tg.platform);
+    } else {
+        console.warn('Telegram WebApp не доступен - тестовый режим');
+        showNotification('⚠️ Тестовый режим (не в Telegram)', true);
+    }
 });
 
-
-
+// Обработчик ошибок
+window.addEventListener('error', function(e) {
+    console.error('Global error:', e.error);
+    showNotification('⚠️ Произошла ошибка', true);
+});
