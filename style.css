@@ -1,71 +1,277 @@
-body {
+/* Общие стили */
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
     padding: 20px;
-    font-family: 'Arial', sans-serif;
-    font-size: 16px;
-    color: var(--tg-theme-text-color);
-    background: var(--tg-theme-bg-color);
+    color: #333;
 }
 
+/* Контейнер */
 .container {
-    max-width: 400px;
+    max-width: 1200px;
     margin: 0 auto;
-    text-align: center;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    padding: 30px;
 }
 
+/* Заголовок */
 h1 {
-    color: var(--tg-theme-text-color);
+    text-align: center;
+    color: #2d3748;
     margin-bottom: 30px;
-    font-size: 20px;
+    font-size: 2.2rem;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #f0f0f0;
 }
 
+/* Сетка достопримечательностей */
 .inner {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
 }
 
-.img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin-bottom: 10px;
-    object-fit: cover;
-}
-
+/* Карточка достопримечательности */
 .item {
-    text-align: center;
-    padding: 15px;
-    background: var(--tg-theme-secondary-bg-color);
+    background: white;
     border-radius: 15px;
-    transition: transform 0.2s;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
 }
 
 .item:hover {
-    transform: scale(1.05);
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
-.btn {
-    display: block;
+/* Изображение */
+.img {
     width: 100%;
-    padding: 10px 15px;
-    border: none;
-    background: #8A2BE2;
-    border-radius: 25px;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* Кнопка */
+.btn {
+    background: linear-gradient(90deg, #667eea, #764ba2);
     color: white;
+    border: none;
+    padding: 18px 15px;
+    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.3s;
-    margin-top: 5px;
+    transition: all 0.3s ease;
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 70px;
+    line-height: 1.4;
 }
 
 .btn:hover {
-    background: #6A0DAD;
+    background: linear-gradient(90deg, #5a67d8, #6b46c1);
+    letter-spacing: 0.5px;
 }
 
+.btn:active {
+    transform: scale(0.98);
+}
+
+/* Информационная панель */
 .usercard {
+    background: linear-gradient(135deg, #f0f4ff, #e6fffa);
+    border-radius: 15px;
+    padding: 20px;
     margin-top: 20px;
-    padding: 15px;
-    background: var(--tg-theme-secondary-bg-color);
+    border: 2px dashed #667eea;
+    text-align: center;
+}
+
+.usercard p {
+    margin: 10px 0;
+    color: #4a5568;
+    font-size: 1rem;
+}
+
+.usercard p:first-child {
+    color: #2d3748;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.usercard p:last-child {
+    font-size: 0.9rem;
+    color: #718096;
+}
+
+/* Анимация загрузки */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+        border-radius: 15px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+    }
+
+    .inner {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .img {
+        height: 160px;
+    }
+
+    .btn {
+        padding: 15px 10px;
+        font-size: 0.95rem;
+        min-height: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .inner {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .img {
+        height: 140px;
+    }
+
+    .btn {
+        padding: 12px 8px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Стили для состояния загрузки */
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Кастомный скроллбар */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
     border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #667eea, #764ba2);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #5a67d8, #6b46c1);
+}
+
+/* Подсветка выбранного элемента */
+.item.selected {
+    border: 2px solid #667eea;
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Анимация пульсации для активных элементов */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(102, 126, 234, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+    }
+}
+
+.item:active {
+    animation: pulse 0.3s;
+}
+
+/* Градиентные границы */
+.item::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #667eea, #764ba2, #ff6b6b, #feca57);
+    z-index: -1;
+    border-radius: 17px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.item:hover::before {
+    opacity: 1;
+}
+
+/* Улучшенные стили для текста кнопок */
+.btn {
+    word-wrap: break-word;
+    hyphens: auto;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+/* Тень для контейнера при скролле */
+.container.scrolled {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
